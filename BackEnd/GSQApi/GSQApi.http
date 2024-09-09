@@ -1,0 +1,6 @@
+@GSQApi_HostAddress = http://localhost:5075
+
+GET {{GSQApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
