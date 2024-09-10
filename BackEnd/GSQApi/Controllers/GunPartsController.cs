@@ -32,6 +32,11 @@ public class GunPartsController(IConfiguration configuration) : ControllerBase
         
         var filePath = Path.Combine(_folderPath, file.FileName);
 
+        if (System.IO.File.Exists(filePath))
+        {
+            return Conflict("File already exists");
+        }
+        
         await using (var stream = new FileStream(filePath, FileMode.Create))
         {
             await file.CopyToAsync(stream);
