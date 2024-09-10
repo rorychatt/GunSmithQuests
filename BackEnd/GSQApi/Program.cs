@@ -1,11 +1,20 @@
+using GSQApi.Database;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Load secrets
+builder.Configuration.AddUserSecrets<Program>();
+
+builder.Services.AddDbContext<GunBuildsContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+                         ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 
 // Add CORS services
 builder.Services.AddCors(options =>
@@ -19,14 +28,6 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
-
-// Make files folder if missing
-var folderPath = Path.Combine(AppContext.BaseDirectory, "Files");
-if (!Directory.Exists(folderPath))
-{
-    Directory.CreateDirectory(folderPath);
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
