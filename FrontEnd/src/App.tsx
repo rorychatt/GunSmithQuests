@@ -2,6 +2,7 @@ import './App.css'
 import {Canvas, useFrame} from "@react-three/fiber";
 import {MutableRefObject, useRef, useState} from "react";
 import {Mesh} from "three";
+import FileUpload from "./components/FileUpload.tsx";
 
 function App() {
 
@@ -21,6 +22,8 @@ function App() {
                 <Box position={[-1.2, 0, 0]}/>
                 <Box position={[1.2, 0, 0]}/>
             </Canvas>
+            
+            <FileUpload/>
         </>
     )
 }
