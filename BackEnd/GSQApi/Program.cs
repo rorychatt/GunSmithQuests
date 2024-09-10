@@ -20,6 +20,14 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+
+// Make files folder if missing
+var folderPath = Path.Combine(AppContext.BaseDirectory, "Files");
+if (!Directory.Exists(folderPath))
+{
+    Directory.CreateDirectory(folderPath);
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

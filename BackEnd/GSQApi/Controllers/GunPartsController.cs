@@ -3,7 +3,7 @@
 namespace GSQApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 public class GunPartsController(IConfiguration configuration) : ControllerBase
 {
     private readonly string _folderPath =
