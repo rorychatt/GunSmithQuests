@@ -62,15 +62,16 @@ export function Aside() {
                 type="text"
                 placeholder="Search by name"
                 value={searchQuery}
+                className="input input-bordered w-full max-w-xs"
                 onChange={(e) => setSearchQuery(e.target.value)}
             />
             {filteredParts.length > 0 ? (
                 <ul>
                     {filteredParts.map((part) => (
-                        <li key={part.guid}>
+                        <li key={part.guid} className="flex flex-row items-center justify-center gap-4">
                             <h3>{part.name}</h3>
                             <p>{part.description}</p>
-                            <button onClick={() => addPartToBuild(part)}>Add</button>
+                            <button className="btn" onClick={() => addPartToBuild(part)}>Add</button>
                         </li>
                     ))}
                 </ul>
