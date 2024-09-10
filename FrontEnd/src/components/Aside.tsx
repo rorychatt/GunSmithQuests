@@ -47,9 +47,9 @@ export function Aside() {
             {usedParts.length > 0 ? (
                 <ul>
                     {usedParts.map((part) => (
-                        <li key={part.guid}>
+                        <li key={part.guid} className="flex flex-row items-center justify-center gap-4">
                             <h3>{part.name}</h3>
-                            <button onClick={() => removePartFromBuild(part)}>Remove</button>
+                            <button className="btn" onClick={() => removePartFromBuild(part)}>Remove</button>
                         </li>
                     ))}
                 </ul>
