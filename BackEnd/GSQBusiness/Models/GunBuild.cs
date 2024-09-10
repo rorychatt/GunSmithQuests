@@ -1,15 +1,40 @@
-﻿using System.Numerics;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Numerics;
 using GSQBusiness.Contracts;
 
 namespace GSQBusiness.Models;
 
-public class GunBuild : IPositionable, IDescribable
-
+public class GunBuild : IDescribable, IPositionable
 {
-    public Vector3 Position { get; set; } = new Vector3(0, 0, 0);
-    public Vector3 EulerAngles { get; set; } = new Vector3(0, 0, 0);
-    public List<GunPart> GunParts { get; set; } = [];
+    [Key] public int Id { get; init; }
+
+    public Guid Guid { get; init; }
+
+    public string Name { get; set; } = null!;
+    public string Description { get; set; } = null!;
+
+    public Vector3 Position { get; set; }
+    public Vector3 EulerAngles { get; set; }
+
+    private List<GunPart> Attachments { get; set; } = [];
     
-    public required string Name { get; set; }
-    public required string Description { get; set; }
+    public void AddAttachment(GunPart attachment)
+    {
+        Attachments.Add(attachment);
+    }
+    
+    public void RemoveAttachment(GunPart attachment)
+    {
+        Attachments.Remove(attachment);
+    }
+    
+    public void ClearAttachments()
+    {
+        Attachments.Clear();
+    }
+    
+    public void SetAttachments(List<GunPart> attachments)
+    {
+        Attachments = attachments;
+    }
 }
