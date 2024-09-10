@@ -1,47 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GSQApi.Database;
+using GSQBusiness.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GSQApi.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class GunPartsController(IConfiguration configuration) : ControllerBase
+public class GunPartsController(GunBuildsContext db) : ControllerBase
 {
-    private readonly string _folderPath =
-        Path.Combine(AppContext.BaseDirectory, configuration["FileStorage:FolderPath"]!);
-    
-    [HttpGet("{filename}")]
-    public IActionResult GetGunPart(string filename)
+    [HttpGet("{partName}")]
+    public Task<ActionResult<GunPart>> GetGunPart(string partName)
     {
-        var filePath = Path.Combine(_folderPath, filename);
-        if (!System.IO.File.Exists(filePath))
-        {
-            return NotFound();
-        }
-        
-        var fileBytes = System.IO.File.ReadAllBytes(filePath);
-        return File(fileBytes, "application/octet-stream");
+        return Task.FromResult<ActionResult<GunPart>>(Ok(db.GetGunPartByName(partName)));
     }
-    
-    [HttpPost("upload")]
-    public async Task<IActionResult> UploadGunPart([FromForm] IFormFile file)
-    {
-        if(file.Length == 0)
-        {
-            return BadRequest("No file was provided");
-        }
-        
-        var filePath = Path.Combine(_folderPath, file.FileName);
 
-        if (System.IO.File.Exists(filePath))
-        {
-            return Conflict("File already exists");
-        }
-        
-        await using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            await file.CopyToAsync(stream);
-        }
-        
-        return Ok(new { filePath});
+    [HttpPost("upload")]
+    public Task<IActionResult> UploadGunPart([FromForm] IFormFile file)
+    {
+        return file.Length == 0
+            ? Task.FromResult<IActionResult>(BadRequest("No file was provided"))
+            : Task.FromResult<IActionResult>(Ok(db.SaveGunPartFile(file)));
+    }
+
+    [HttpGet("listAll")]
+    public Task<ActionResult<IEnumerable<GunPart>>> ListAllGunParts()
+    {
+        return Task.FromResult<ActionResult<IEnumerable<GunPart>>>(Ok(db.GunParts.ToList()));
+    }
+
+    [HttpGet("download/{partName}")]
+    public Task<IActionResult> DownloadGunPart(string partName)
+    {
+        var gunPart = db.GetGunPartByName(partName);
+        return gunPart == null
+            ? Task.FromResult<IActionResult>(NotFound())
+            : Task.FromResult<IActionResult>(File(gunPart.Content, gunPart.ContentType, gunPart.Name));
     }
 }
