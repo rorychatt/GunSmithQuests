@@ -23,9 +23,7 @@ const FileUpload = () => {
                         method: 'POST',
                         body: formData,
                     });
-
-                    const data = await result.json();
-                    console.log(data);
+                    console.log(result)
                 } catch (error) {
                     console.error(`Error uploading file ${file.name}:`, error);
                 }
@@ -36,7 +34,7 @@ const FileUpload = () => {
     return (
         <>
             <div className="input-group">
-                <input id="file" type="file" multiple onChange={handleFileChange} />
+                <input id="file" type="file" multiple onChange={handleFileChange}/>
             </div>
             {files.length > 0 && (
                 <section>

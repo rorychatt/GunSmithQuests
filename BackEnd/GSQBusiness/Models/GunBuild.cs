@@ -8,10 +8,10 @@ public class GunBuild : IDescribable, IPositionable
 {
     [Key] public int Id { get; init; }
 
-    public Guid Guid { get; init; }
+    public Guid Guid { get; } = Guid.NewGuid();
 
     public string Name { get; set; } = null!;
-    public string Description { get; set; } = null!;
+    public string? Description { get; set; }
 
     public Vector3 Position { get; set; }
     public Vector3 EulerAngles { get; set; }

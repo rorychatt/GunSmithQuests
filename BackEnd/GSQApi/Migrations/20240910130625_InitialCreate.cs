@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace GSQApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,9 +16,8 @@ namespace GSQApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EulerAngles = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -34,17 +32,33 @@ namespace GSQApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EulerAngles = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GunParts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GunPartContents",
+                columns: table => new
+                {
+                    GunPartId = table.Column<int>(type: "int", nullable: false),
+                    ByteArr = table.Column<byte[]>(type: "VARBINARY(MAX)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GunPartContents", x => x.GunPartId);
+                    table.ForeignKey(
+                        name: "FK_GunPartContents_GunParts_GunPartId",
+                        column: x => x.GunPartId,
+                        principalTable: "GunParts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
         }
 
@@ -53,6 +67,9 @@ namespace GSQApi.Migrations
         {
             migrationBuilder.DropTable(
                 name: "GunBuilds");
+
+            migrationBuilder.DropTable(
+                name: "GunPartContents");
 
             migrationBuilder.DropTable(
                 name: "GunParts");

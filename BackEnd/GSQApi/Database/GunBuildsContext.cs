@@ -1,5 +1,4 @@
-﻿using GSQBusiness.Contracts;
-using GSQBusiness.Models;
+﻿using GSQBusiness.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GSQApi.Database;
@@ -8,6 +7,7 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
 {
     public DbSet<GunBuild> GunBuilds { get; init; }
     public DbSet<GunPart> GunParts { get; init; }
+    public DbSet<GunPartContent> GunPartContents { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -18,7 +18,11 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
         modelBuilder.Entity<GunPart>()
             .Property(e => e.EulerAngles)
             .HasConversion(new Vector3Converter());
-        
+
+        modelBuilder.Entity<GunPartContent>()
+            .Property(e => e.ByteArr)
+            .HasColumnType("VARBINARY(MAX)");
+
         modelBuilder.Entity<GunBuild>()
             .Property(e => e.Position)
             .HasConversion(new Vector3Converter());
@@ -37,16 +41,21 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
 
     public async Task<bool> SaveGunPartFile(IFormFile file)
     {
-        using var memoryStream = new MemoryStream();
+        await using var memoryStream = new MemoryStream();
         await file.CopyToAsync(memoryStream);
+
+        var gunPartContent = new GunPartContent() { ByteArr = memoryStream.ToArray() };
+        
         var gunPart = new GunPart
         {
             Name = file.FileName,
-            Content = memoryStream.ToArray(),
-            ContentType = file.ContentType
+            ContentType = file.ContentType,
+            Content = gunPartContent
         };
-        if(GetGunPartByName(file.FileName) != null) return false;
+        
+        GunPartContents.Add(gunPartContent);
         GunParts.Add(gunPart);
+        
         await SaveChangesAsync();
         return true;
     }
