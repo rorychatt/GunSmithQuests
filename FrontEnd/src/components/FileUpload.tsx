@@ -50,7 +50,7 @@ const FileUpload = () => {
             {file && (
                 <button
                     onClick={handleUpload}
-                    className="submit"
+                    className="btn"
                 >Upload a file</button>
             )}
         </>
