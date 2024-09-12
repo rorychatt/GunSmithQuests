@@ -10,17 +10,15 @@ namespace GSQApi.Controllers;
 public class GunPartsController(GunBuildsContext db) : ControllerBase
 {
     [HttpGet("{partName}")]
-    public Task<ActionResult<GunPart>> GetGunPart(string partName)
+    public async Task<ActionResult<GunPart>> GetGunPart(string partName)
     {
-        throw new NotImplementedException();
-
+        return Ok(await db.GetGunPartByNameAsync(partName));
     }
 
     [HttpPost("upload")]
-    public Task<IActionResult> UploadGunPart([FromForm] IFormFile file)
+    public async Task<IActionResult> UploadGunPart([FromForm] IFormFile file)
     {
-        throw new NotImplementedException();
-
+        
     }
 
     [HttpGet("listAll")]

@@ -9,5 +9,9 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
     public DbSet<GunBuild> GunBuilds { get; init; } = null!;
     public DbSet<Attachment> Attachments { get; init; } = null!;
     public DbSet<GunPartContent> GunPartContents { get; init; } = null!;
-    
+
+    public Task<GunPart?> GetGunPartByNameAsync(string partName)
+    {
+        return GunParts.FirstOrDefaultAsync(part => part.Name == partName);
+    }
 }
