@@ -10,6 +10,12 @@ public class Attachment : IDescribable, IPositionable
     public int Id { get; init; }
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
-    public Vector3 Position { get; set; } = new Vector3(0, 0, 0);
-    public Vector3 EulerAngles { get; set; } = new Vector3(0, 0, 0);
+    
+    public float PositionX { get; set; }
+    public float PositionY { get; set; }
+    public float PositionZ { get; set; }
+    public float RotationX { get; set; }
+    public float RotationY { get; set; }
+    public float RotationZ { get; set; }
+
 }
