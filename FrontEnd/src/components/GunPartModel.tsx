@@ -16,7 +16,7 @@ export function GunPartModel({ part }: { part: GunPart }) {
 
     useEffect(() => {
         const loadModel = async () => {
-            const loadedObj = await new OBJLoader().loadAsync(`${API_URL}/GunParts/download/${part.name}.obj`);
+            const loadedObj = await new OBJLoader().loadAsync(`${API_URL}/GunParts/download/${part.name}`);
             setObj(loadedObj);
         };
 
