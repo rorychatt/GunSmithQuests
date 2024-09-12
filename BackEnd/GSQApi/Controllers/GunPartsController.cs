@@ -18,7 +18,17 @@ public class GunPartsController(GunBuildsContext db) : ControllerBase
     [HttpPost("upload")]
     public async Task<IActionResult> UploadGunPart([FromForm] IFormFile file)
     {
+        using var ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        var content = new GunPartContent { ByteArr = ms.ToArray() };
         
+        var gunPart = new GunPart
+        {
+            Name = file.FileName,
+            Content = content
+        };
+        
+        await db.AddGunPartAsync(gunPart);
     }
 
     [HttpGet("listAll")]
