@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "../constants.ts";
-import { Canvas, useLoader } from "@react-three/fiber";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
-import { OrbitControls } from "@react-three/drei";
 import FileUpload from "./FileUpload.tsx";
 
 interface GunPart {
@@ -79,30 +76,32 @@ export function Aside() {
             ) : (
                 <p>No parts found.</p>
             )}
+
+            <FileUpload/>
         </aside>
     );
 }
-
-function GunPartModel({ part }: { part: GunPart }) {
-    const obj = useLoader(OBJLoader, `${API_URL}/GunParts/${part.guid}/model.obj`);
-    return <primitive object={obj} />;
-}
-
-export function Main() {
-    const [usedParts] = useState<GunPart[]>([]);
-
-    return (
-        <aside className="flex flex-col items-center justify-center text-center">
-            <Canvas className="border-2 border-gray-300 rounded-lg p-2" gl={{ alpha: true }} style={{ background: '#e0f7fa' }} camera={{ position: [0, 0, 5] }}>
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} />
-                <directionalLight position={[5, 5, 5]} intensity={1} />
-                <spotLight position={[-5, 5, 5]} angle={0.3} penumbra={1} intensity={1} castShadow />
-                {usedParts.map(part => (
-                    <GunPartModel key={part.guid} part={part} />
-                ))}
-                <OrbitControls />
-            </Canvas>
-        </aside>
-    );
-}
+//
+// function GunPartModel({ part }: { part: GunPart }) {
+//     const obj = useLoader(OBJLoader, `${API_URL}/GunParts/${part.guid}/model.obj`);
+//     return <primitive object={obj} />;
+// }
+//
+// export function Main() {
+//     const [usedParts] = useState<GunPart[]>([]);
+//
+//     return (
+//         <aside className="flex flex-col items-center justify-center text-center">
+//             <Canvas className="border-2 border-gray-300 rounded-lg p-2" gl={{ alpha: true }} style={{ background: '#e0f7fa' }} camera={{ position: [0, 0, 5] }}>
+//                 <ambientLight intensity={0.5} />
+//                 <pointLight position={[10, 10, 10]} />
+//                 <directionalLight position={[5, 5, 5]} intensity={1} />
+//                 <spotLight position={[-5, 5, 5]} angle={0.3} penumbra={1} intensity={1} castShadow />
+//                 {usedParts.map(part => (
+//                     <GunPartModel key={part.guid} part={part} />
+//                 ))}
+//                 <OrbitControls />
+//             </Canvas>
+//         </aside>
+//     );
+// }
