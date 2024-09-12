@@ -17,6 +17,10 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
 
     public async Task<int> AddGunPartAsync(GunPart gunPart)
     {
+        if(GunParts.Any(gp => gp.Name == gunPart.Name))
+        {
+            return 0;
+        }
         await GunParts.AddAsync(gunPart);
         return await SaveChangesAsync();
     }
