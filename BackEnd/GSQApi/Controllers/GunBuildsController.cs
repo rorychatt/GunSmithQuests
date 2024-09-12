@@ -11,6 +11,6 @@ public class GunBuildsController(GunBuildsContext db) : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<GunBuild>> GetGunBuilds()
     {
-        return Ok(db.GetGunBuilds());
+        throw new NotImplementedException();
     }
 }

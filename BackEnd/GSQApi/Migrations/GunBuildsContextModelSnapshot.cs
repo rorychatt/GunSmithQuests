@@ -91,6 +91,9 @@ namespace GSQApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ContentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -104,19 +107,24 @@ namespace GSQApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ContentId");
+
                     b.ToTable("GunParts");
                 });
 
             modelBuilder.Entity("GSQBusiness.Models.GunPartContent", b =>
                 {
-                    b.Property<int>("GunPartId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<byte[]>("ByteArr")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.HasKey("GunPartId");
+                    b.HasKey("Id");
 
                     b.ToTable("GunPartContents");
                 });
@@ -128,26 +136,20 @@ namespace GSQApi.Migrations
                         .HasForeignKey("GunBuildId");
                 });
 
-            modelBuilder.Entity("GSQBusiness.Models.GunPartContent", b =>
+            modelBuilder.Entity("GSQBusiness.Models.GunPart", b =>
                 {
-                    b.HasOne("GSQBusiness.Models.GunPart", "GunPart")
-                        .WithOne("Content")
-                        .HasForeignKey("GSQBusiness.Models.GunPartContent", "GunPartId")
+                    b.HasOne("GSQBusiness.Models.GunPartContent", "Content")
+                        .WithMany()
+                        .HasForeignKey("ContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("GunPart");
+                    b.Navigation("Content");
                 });
 
             modelBuilder.Entity("GSQBusiness.Models.GunBuild", b =>
                 {
                     b.Navigation("Attachments");
-                });
-
-            modelBuilder.Entity("GSQBusiness.Models.GunPart", b =>
-                {
-                    b.Navigation("Content")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
