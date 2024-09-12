@@ -42,7 +42,7 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
 
     public GunPart? GetGunPartByName(string partName)
     {
-        return GunParts.FirstOrDefault(part => part.Name.Contains(partName));
+        return GunParts.Include(part => part.Content).FirstOrDefault(part => part.Name.Contains(partName));
     }
 
     public async Task<bool> SaveGunPartFile(IFormFile file)
