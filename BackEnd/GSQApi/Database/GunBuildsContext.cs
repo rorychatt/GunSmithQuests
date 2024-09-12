@@ -23,7 +23,7 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
 
     public Task<List<GunPart>> GetAllGunPartsAsync()
     {
-        return GunParts.Include(gp => gp.Content).ToListAsync();
+        return GunParts.ToListAsync();
     }
 
     public async Task<List<GunBuild>> GetAllGunBuildsAsync()
