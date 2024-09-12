@@ -3,6 +3,7 @@ import { API_URL } from "../constants.ts";
 import { Canvas, useLoader } from "@react-three/fiber";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "@react-three/drei";
+import FileUpload from "./FileUpload.tsx";
 
 interface GunPart {
     guid: string;
@@ -91,7 +92,7 @@ export function Main() {
     const [usedParts] = useState<GunPart[]>([]);
 
     return (
-        <main className="flex flex-col items-center justify-center text-center">
+        <aside className="flex flex-col items-center justify-center text-center">
             <Canvas className="border-2 border-gray-300 rounded-lg p-2" gl={{ alpha: true }} style={{ background: '#e0f7fa' }} camera={{ position: [0, 0, 5] }}>
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} />
@@ -102,6 +103,7 @@ export function Main() {
                 ))}
                 <OrbitControls />
             </Canvas>
-        </main>
+            <FileUpload/>
+        </aside>
     );
 }
