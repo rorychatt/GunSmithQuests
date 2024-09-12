@@ -5,11 +5,31 @@
 namespace GSQApi.Migrations
 {
     /// <inheritdoc />
-    public partial class initv3 : Migration
+    public partial class initv4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Attachments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PositionX = table.Column<float>(type: "real", nullable: false),
+                    PositionY = table.Column<float>(type: "real", nullable: false),
+                    PositionZ = table.Column<float>(type: "real", nullable: false),
+                    RotationX = table.Column<float>(type: "real", nullable: false),
+                    RotationY = table.Column<float>(type: "real", nullable: false),
+                    RotationZ = table.Column<float>(type: "real", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attachments", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "GunBuilds",
                 columns: table => new
@@ -18,8 +38,12 @@ namespace GSQApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EulerAngles = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PositionX = table.Column<float>(type: "real", nullable: false),
+                    PositionY = table.Column<float>(type: "real", nullable: false),
+                    PositionZ = table.Column<float>(type: "real", nullable: false),
+                    RotationX = table.Column<float>(type: "real", nullable: false),
+                    RotationY = table.Column<float>(type: "real", nullable: false),
+                    RotationZ = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,28 +64,6 @@ namespace GSQApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Attachments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EulerAngles = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GunBuildId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Attachments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Attachments_GunBuilds_GunBuildId",
-                        column: x => x.GunBuildId,
-                        principalTable: "GunBuilds",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "GunParts",
                 columns: table => new
                 {
@@ -69,7 +71,6 @@ namespace GSQApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -84,11 +85,6 @@ namespace GSQApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attachments_GunBuildId",
-                table: "Attachments",
-                column: "GunBuildId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_GunParts_ContentId",
                 table: "GunParts",
                 column: "ContentId");
@@ -101,10 +97,10 @@ namespace GSQApi.Migrations
                 name: "Attachments");
 
             migrationBuilder.DropTable(
-                name: "GunParts");
+                name: "GunBuilds");
 
             migrationBuilder.DropTable(
-                name: "GunBuilds");
+                name: "GunParts");
 
             migrationBuilder.DropTable(
                 name: "GunPartContents");
