@@ -8,16 +8,18 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
     public DbSet<GunBuild> GunBuilds { get; init; }
     public DbSet<GunPart> GunParts { get; init; }
     public DbSet<GunPartContent> GunPartContents { get; init; }
+    
+    public DbSet<Attachment> Attachments { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<GunPart>()
-            .Property(e => e.Position)
-            .HasConversion(new Vector3Converter());
-
-        modelBuilder.Entity<GunPart>()
-            .Property(e => e.EulerAngles)
-            .HasConversion(new Vector3Converter());
+        // modelBuilder.Entity<GunPart>()
+        //     .Property(e => e.Position)
+        //     .HasConversion(new Vector3Converter());
+        //
+        // modelBuilder.Entity<GunPart>()
+        //     .Property(e => e.EulerAngles)
+        //     .HasConversion(new Vector3Converter());
 
         modelBuilder.Entity<GunPartContent>()
             .Property(e => e.ByteArr)
@@ -30,6 +32,17 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
         modelBuilder.Entity<GunBuild>()
             .Property(e => e.EulerAngles)
             .HasConversion(new Vector3Converter());
+        
+        modelBuilder.Entity<Attachment>()
+            .Property(e => e.Position)
+            .HasConversion(new Vector3Converter());
+
+        modelBuilder.Entity<Attachment>()
+            .Property(e => e.EulerAngles)
+            .HasConversion(new Vector3Converter());
+        
+        
+        
 
         base.OnModelCreating(modelBuilder);
     }
