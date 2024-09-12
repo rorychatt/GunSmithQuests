@@ -25,4 +25,10 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
     {
         return await GunParts.ToListAsync();
     }
+
+
+    public async Task<List<GunBuild>> GetAllGunBuildsAsync()
+    {
+        return await GunBuilds.ToListAsync();
+    }
 }

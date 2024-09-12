@@ -9,8 +9,8 @@ namespace GSQApi.Controllers;
 public class GunBuildsController(GunBuildsContext db) : ControllerBase
 {
     [HttpGet]
-    public ActionResult<IEnumerable<GunBuild>> GetGunBuilds()
+    public async Task<ActionResult<IEnumerable<GunBuild>>> GetGunBuilds()
     {
-        throw new NotImplementedException();
+        return Ok(await db.GetAllGunBuildsAsync());
     }
 }
