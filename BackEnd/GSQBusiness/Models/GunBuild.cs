@@ -37,4 +37,13 @@ public class GunBuild : IDescribable, IPositionable
         Attachments.Remove(attachment);
         return true;
     }
+
+    public bool TryRemovePartByName(string name)
+    {
+        var attachment = Attachments.FirstOrDefault(attachment => attachment.Name == name);
+        if (attachment == null) return false;
+
+        Attachments.Remove(attachment);
+        return true;
+    }
 }
