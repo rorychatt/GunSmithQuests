@@ -12,29 +12,29 @@ public class GunBuild : IDescribable, IPositionable
 
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
-
     public Vector3 Position { get; set; }
     public Vector3 EulerAngles { get; set; }
+    public List<Attachment> Attachments { get; init; } = [];
 
-    public List<GunPart> Attachments { get; set; } = [];
-    
-    public void AddAttachment(GunPart attachment)
+    public bool TryAddPart(GunPart gunPart)
     {
-        Attachments.Add(attachment);
+        if (Attachments.Any(attachment => attachment.Name == gunPart.Name)) return false;
+
+        Attachments.Add(new Attachment
+        {
+            Name = gunPart.Name,
+            Description = gunPart.Description
+        });
+
+        return true;
     }
-    
-    public void RemoveAttachment(GunPart attachment)
+
+    public bool TryRemovePart(GunPart gunPart)
     {
+        var attachment = Attachments.FirstOrDefault(attachment => attachment.Name == gunPart.Name);
+        if (attachment == null) return false;
+
         Attachments.Remove(attachment);
-    }
-    
-    public void ClearAttachments()
-    {
-        Attachments.Clear();
-    }
-    
-    public void SetAttachments(List<GunPart> attachments)
-    {
-        Attachments = attachments;
+        return true;
     }
 }
