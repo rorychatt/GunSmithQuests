@@ -34,9 +34,9 @@ public class GunPartsController(GunBuildsContext db) : ControllerBase
     }
 
     [HttpGet("listAll")]
-    public ActionResult<List<GunPart>> ListAllGunParts()
+    public ActionResult<List<GunPartResponse>> ListAllGunParts()
     {
-        return Ok(db.GetAllGunPartsAsync().Result);
+        return Ok(db.GetAllGunPartsAsync().Result.Select(gp => (GunPartResponse)gp).ToList());
     }
 
     [HttpGet("download/{partName}")]
