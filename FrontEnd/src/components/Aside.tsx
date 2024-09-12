@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "../constants.ts";
 import FileUpload from "./FileUpload.tsx";
-import {GunPart} from "./types.ts";
+import { GunPart } from "./types.ts";
 
-export function Aside({ onAddPart }: { onAddPart: (part: GunPart) => void }) {
+export function Aside({ onAddPart, onRemovePart }: { onAddPart: (part: GunPart) => void, onRemovePart: (part: GunPart) => void }) {
     const [gunParts, setGunParts] = useState<GunPart[]>([]);
     const [usedParts, setUsedParts] = useState<GunPart[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -29,6 +29,7 @@ export function Aside({ onAddPart }: { onAddPart: (part: GunPart) => void }) {
 
     const removePartFromBuild = (part: GunPart) => {
         setUsedParts(usedParts.filter(p => p.id !== part.id));
+        onRemovePart(part);
     };
 
     const filteredParts = gunParts.filter(part =>
@@ -73,7 +74,7 @@ export function Aside({ onAddPart }: { onAddPart: (part: GunPart) => void }) {
                 <p>No parts found.</p>
             )}
 
-            <FileUpload/>
+            <FileUpload />
         </aside>
     );
 }

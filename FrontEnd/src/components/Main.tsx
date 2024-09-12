@@ -1,10 +1,10 @@
-import {Canvas, useFrame} from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useState } from "react";
 import { OrbitControls } from "@react-three/drei";
-import {GunPart} from "./types.ts";
-import {GunPartModel} from "./GunPartModel.tsx";
-import {Aside} from "./Aside.tsx";
-import {MOUSE} from "three";
+import { GunPart } from "./types.ts";
+import { GunPartModel } from "./GunPartModel.tsx";
+import { Aside } from "./Aside.tsx";
+import { MOUSE } from "three";
 
 export function Main() {
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -13,6 +13,10 @@ export function Main() {
 
     const handleAddPart = (part: GunPart) => {
         setUsedParts([...usedParts, part]);
+    };
+
+    const handleRemovePart = (part: GunPart) => {
+        setUsedParts(usedParts.filter(p => p.id !== part.id));
     };
 
     const toggleFullscreen = () => {
@@ -41,14 +45,14 @@ export function Main() {
                     <OrbitControls
                         mouseButtons={{
                             LEFT: undefined,
-                            RIGHT: MOUSE.PAN                            
+                            RIGHT: MOUSE.PAN
                         }}
                     />
                     <ResetCamera resetCameraFlag={resetCameraFlag} setResetCameraFlag={setResetCameraFlag} />
                 </Suspense>
             </Canvas>
 
-            <Aside onAddPart={handleAddPart}/>
+            <Aside onAddPart={handleAddPart} onRemovePart={handleRemovePart} />
         </main>
     );
 }
