@@ -3,7 +3,7 @@ import { API_URL } from "../constants.ts";
 import FileUpload from "./FileUpload.tsx";
 
 interface GunPart {
-    guid: string;
+    id: string;
     name: string;
     description: string;
 }
@@ -32,7 +32,7 @@ export function Aside() {
     };
 
     const removePartFromBuild = (part: GunPart) => {
-        setUsedParts(usedParts.filter(p => p.guid !== part.guid));
+        setUsedParts(usedParts.filter(p => p.id !== part.id));
     };
 
     const filteredParts = gunParts.filter(part =>
@@ -45,7 +45,7 @@ export function Aside() {
             {usedParts.length > 0 ? (
                 <ul>
                     {usedParts.map((part) => (
-                        <li key={part.guid} className="flex flex-row items-center justify-center gap-4">
+                        <li key={part.id} className="flex flex-row items-center justify-center gap-4">
                             <h3>{part.name}</h3>
                             <button className="btn" onClick={() => removePartFromBuild(part)}>Remove</button>
                         </li>
@@ -66,7 +66,7 @@ export function Aside() {
             {filteredParts.length > 0 ? (
                 <ul>
                     {filteredParts.map((part) => (
-                        <li key={part.guid} className="flex flex-row items-center justify-center gap-4">
+                        <li key={part.id} className="flex flex-row items-center justify-center gap-4">
                             <h3>{part.name}</h3>
                             <p>{part.description}</p>
                             <button className="btn" onClick={() => addPartToBuild(part)}>Add</button>
