@@ -1,10 +1,18 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useState } from "react";
 import { OrbitControls } from "@react-three/drei";
+import {GunPart} from "./types.ts";
+import {GunPartModel} from "./GunPartModel.tsx";
+import {Aside} from "./Aside.tsx";
 
 export function Main() {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [resetCameraFlag, setResetCameraFlag] = useState(false);
+    const [usedParts, setUsedParts] = useState<GunPart[]>([]);
+
+    const handleAddPart = (part: GunPart) => {
+        setUsedParts([...usedParts, part]);
+    };
 
     const toggleFullscreen = () => {
         setIsFullscreen(!isFullscreen);
@@ -26,14 +34,15 @@ export function Main() {
                     <pointLight position={[10, 10, 10]} />
                     <directionalLight position={[5, 5, 5]} intensity={1} />
                     <spotLight position={[-5, 5, 5]} angle={0.3} penumbra={1} intensity={1} castShadow />
-                    <mesh>
-                        <boxGeometry args={[1, 1, 1]} />
-                        <meshStandardMaterial color="orange" />
-                    </mesh>
+                    {usedParts.map(part => (
+                        <GunPartModel key={part.id} part={part} />
+                    ))}
                     <OrbitControls />
                     <ResetCamera resetCameraFlag={resetCameraFlag} setResetCameraFlag={setResetCameraFlag} />
                 </Suspense>
             </Canvas>
+
+            <Aside onAddPart={handleAddPart}/>
         </main>
     );
 }

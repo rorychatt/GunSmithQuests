@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "../constants.ts";
 import FileUpload from "./FileUpload.tsx";
-
-interface GunPart {
-    id: string;
-    name: string;
-    description: string;
-}
+import {GunPart} from "./types.ts";
 
 export function Aside({ onAddPart }: { onAddPart: (part: GunPart) => void }) {
     const [gunParts, setGunParts] = useState<GunPart[]>([]);
