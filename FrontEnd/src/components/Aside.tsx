@@ -103,7 +103,6 @@ export function Main() {
                 ))}
                 <OrbitControls />
             </Canvas>
-            <FileUpload/>
         </aside>
     );
 }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GSQApi.Migrations
 {
     [DbContext(typeof(GunBuildsContext))]
-    [Migration("20240912100248_initv4")]
-    partial class initv4
+    [Migration("20240912104153_initv5")]
+    partial class initv5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

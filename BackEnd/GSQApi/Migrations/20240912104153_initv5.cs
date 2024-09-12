@@ -5,7 +5,7 @@
 namespace GSQApi.Migrations
 {
     /// <inheritdoc />
-    public partial class initv4 : Migration
+    public partial class initv5 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

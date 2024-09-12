@@ -12,7 +12,7 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
 
     public Task<GunPart?> GetGunPartByNameAsync(string partName)
     {
-        return GunParts.FirstOrDefaultAsync(part => part.Name == partName);
+        return GunParts.Include(gp => gp.Content).FirstOrDefaultAsync(part => part.Name == partName);
     }
 
     public async Task<int> AddGunPartAsync(GunPart gunPart)
@@ -21,11 +21,10 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
         return await SaveChangesAsync();
     }
 
-    public async Task<List<GunPart>> GetAllGunPartsAsync()
+    public Task<List<GunPart>> GetAllGunPartsAsync()
     {
-        return await GunParts.ToListAsync();
+        return GunParts.Include(gp => gp.Content).ToListAsync();
     }
-
 
     public async Task<List<GunBuild>> GetAllGunBuildsAsync()
     {
