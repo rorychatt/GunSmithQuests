@@ -5,7 +5,7 @@ namespace GSQApi.Database;
 
 public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbContext(options)
 {
-    public DbSet<GunBuild?> GunBuilds { get; init; }
+    public DbSet<GunBuild> GunBuilds { get; init; }
     public DbSet<GunPart> GunParts { get; init; }
     public DbSet<GunPartContent> GunPartContents { get; init; }
 
@@ -67,6 +67,6 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
 
     public Task<GunBuild?> GetGunBuildByName(string searchTerm)
     {
-        return Task.FromResult(GunBuilds.Include(build => build!.Attachments).FirstOrDefault(build => build!.Name.Contains(searchTerm)));
+        return Task.FromResult(GunBuilds.Include(build => build.Attachments).FirstOrDefault(build => build.Name.Contains(searchTerm)));
     }
 }
