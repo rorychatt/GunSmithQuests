@@ -21,29 +21,31 @@ public class GunPartsController(GunBuildsContext db) : ControllerBase
         using var ms = new MemoryStream();
         await file.CopyToAsync(ms);
         var content = new GunPartContent { ByteArr = ms.ToArray() };
-        
+
         var gunPart = new GunPart
         {
             Name = file.FileName,
             Content = content
         };
-        
+
         var taskResult = await db.AddGunPartAsync(gunPart);
-        
+
         return taskResult == 1 ? Ok() : StatusCode(400);
     }
 
     [HttpGet("listAll")]
-    public Task<ActionResult<IEnumerable<GunPartResponse>>> ListAllGunParts()
+    public Task<ActionResult<List<GunPartResponse>>> ListAllGunParts()
     {
-        throw new NotImplementedException();
-
+        return Task.FromResult<ActionResult<List<GunPartResponse>>>(Ok(db.GetAllGunPartsAsync()));
     }
 
     [HttpGet("download/{partName}")]
     public Task<IActionResult> DownloadGunPart(string partName)
     {
-        throw new NotImplementedException();
+        var gunPart = db.GetGunPartByNameAsync(partName).Result;
 
+        return gunPart is null
+            ? Task.FromResult<IActionResult>(NotFound())
+            : Task.FromResult<IActionResult>(File(gunPart.Content.ByteArr, "application/octet-stream", gunPart.Name));
     }
 }
