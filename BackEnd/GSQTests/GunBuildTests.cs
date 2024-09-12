@@ -28,4 +28,18 @@ public class GunBuildTests
         
         gunBuild.Attachments.Should().BeEmpty();
     }
+    
+    [Fact]
+    public void Build_Should_Remove_GunPart_By_Name()
+    {
+        var gunBuild = new GunBuild();
+        var gunPart = new GunPart { Name = "TestPart" };
+        
+        gunBuild.TryAddPart(gunPart);
+        gunBuild.TryRemovePartByName(gunPart.Name);
+        
+        gunBuild.Attachments.Should().BeEmpty();
+    }
+    
+    
 }
