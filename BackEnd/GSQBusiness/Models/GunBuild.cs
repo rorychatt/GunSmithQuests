@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Numerics;
 using GSQBusiness.Contracts;
 
 namespace GSQBusiness.Models;
@@ -7,34 +6,31 @@ namespace GSQBusiness.Models;
 public class GunBuild : IDescribable, IPositionable
 {
     [Key] public int Id { get; init; }
-
-    public Guid Guid { get; } = Guid.NewGuid();
-
-    public string Name { get; set; } = null!;
+    [Required] public string Name { get; set; } = null!;
     public string? Description { get; set; }
+    private List<Attachment> Attachments { get; set; } = [];
+    public float PositionX { get; set; }
+    public float PositionY { get; set; }
+    public float PositionZ { get; set; }
+    public float RotationX { get; set; }
+    public float RotationY { get; set; }
+    public float RotationZ { get; set; }
 
-    public Vector3 Position { get; set; }
-    public Vector3 EulerAngles { get; set; }
-
-    private List<GunPart> Attachments { get; set; } = [];
-    
-    public void AddAttachment(GunPart attachment)
+    public bool AddAttachment(Attachment attachment)
     {
+        if (Attachments.Any(att => att.Name == attachment.Name))
+        {
+            return false;
+        }
+
         Attachments.Add(attachment);
+        return true;
     }
-    
-    public void RemoveAttachment(GunPart attachment)
+
+    public bool RemoveAttachment(Attachment attachment)
     {
+        if (Attachments.All(att => att.Name != attachment.Name)) return false;
         Attachments.Remove(attachment);
-    }
-    
-    public void ClearAttachments()
-    {
-        Attachments.Clear();
-    }
-    
-    public void SetAttachments(List<GunPart> attachments)
-    {
-        Attachments = attachments;
+        return true;
     }
 }

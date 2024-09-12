@@ -12,30 +12,40 @@ public class GunPartsController(GunBuildsContext db) : ControllerBase
     [HttpGet("{partName}")]
     public async Task<ActionResult<GunPart>> GetGunPart(string partName)
     {
-        return await Task.FromResult<ActionResult<GunPart>>(Ok(db.GetGunPartByName(partName)));
+        return Ok(await db.GetGunPartByNameAsync(partName));
     }
 
     [HttpPost("upload")]
     public async Task<IActionResult> UploadGunPart([FromForm] IFormFile file)
     {
-        return await (await db.SaveGunPartFile(file)
-            ? Task.FromResult<IActionResult>(Ok())
-            : Task.FromResult<IActionResult>(StatusCode(500)));
+        using var ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        var content = new GunPartContent { ByteArr = ms.ToArray() };
+
+        var gunPart = new GunPart
+        {
+            Name = file.FileName,
+            Content = content
+        };
+
+        var taskResult = await db.AddGunPartAsync(gunPart);
+
+        return taskResult == 1 ? Ok() : StatusCode(400);
     }
 
     [HttpGet("listAll")]
-    public async Task<ActionResult<IEnumerable<GunPartResponse>>> ListAllGunParts()
+    public ActionResult<List<GunPartResponse>> ListAllGunParts()
     {
-        return await Task.FromResult<ActionResult<IEnumerable<GunPartResponse>>>(
-            Ok(db.GunParts.Select(part => (GunPartResponse)part).ToList()));
+        return Ok(db.GetAllGunPartsAsync().Result.Select(gp => (GunPartResponse)gp).ToList());
     }
 
     [HttpGet("download/{partName}")]
-    public async Task<IActionResult> DownloadGunPart(string partName)
+    public Task<IActionResult> DownloadGunPart(string partName)
     {
-        var gunPart = db.GetGunPartByName(partName);
-        return await (gunPart == null
+        var gunPart = db.GetGunPartByNameAsync(partName).Result;
+
+        return gunPart is null
             ? Task.FromResult<IActionResult>(NotFound())
-            : Task.FromResult<IActionResult>(File(gunPart.Content.ByteArr, gunPart.ContentType, gunPart.Name)));
+            : Task.FromResult<IActionResult>(File(gunPart.Content.ByteArr, "application/octet-stream", gunPart.Name));
     }
 }

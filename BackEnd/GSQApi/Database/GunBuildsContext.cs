@@ -5,58 +5,33 @@ namespace GSQApi.Database;
 
 public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbContext(options)
 {
-    public DbSet<GunBuild> GunBuilds { get; init; }
-    public DbSet<GunPart> GunParts { get; init; }
-    public DbSet<GunPartContent> GunPartContents { get; init; }
+    public DbSet<GunPart> GunParts { get; init; } = null!;
+    public DbSet<GunBuild> GunBuilds { get; init; } = null!;
+    public DbSet<Attachment> Attachments { get; init; } = null!;
+    public DbSet<GunPartContent> GunPartContents { get; init; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public Task<GunPart?> GetGunPartByNameAsync(string partName)
     {
-        modelBuilder.Entity<GunPart>()
-            .Property(e => e.Position)
-            .HasConversion(new Vector3Converter());
-
-        modelBuilder.Entity<GunPart>()
-            .Property(e => e.EulerAngles)
-            .HasConversion(new Vector3Converter());
-
-        modelBuilder.Entity<GunPartContent>()
-            .Property(e => e.ByteArr)
-            .HasColumnType("VARBINARY(MAX)");
-
-        modelBuilder.Entity<GunBuild>()
-            .Property(e => e.Position)
-            .HasConversion(new Vector3Converter());
-
-        modelBuilder.Entity<GunBuild>()
-            .Property(e => e.EulerAngles)
-            .HasConversion(new Vector3Converter());
-
-        base.OnModelCreating(modelBuilder);
+        return GunParts.Include(gp => gp.Content).FirstOrDefaultAsync(part => part.Name == partName);
     }
 
-    public GunPart? GetGunPartByName(string partName)
+    public async Task<int> AddGunPartAsync(GunPart gunPart)
     {
-        return GunParts.FirstOrDefault(part => part.Name.Contains(partName));
-    }
-
-    public async Task<bool> SaveGunPartFile(IFormFile file)
-    {
-        await using var memoryStream = new MemoryStream();
-        await file.CopyToAsync(memoryStream);
-
-        var gunPartContent = new GunPartContent() { ByteArr = memoryStream.ToArray() };
-        
-        var gunPart = new GunPart
+        if(GunParts.Any(gp => gp.Name == gunPart.Name))
         {
-            Name = file.FileName,
-            ContentType = file.ContentType,
-            Content = gunPartContent
-        };
-        
-        GunPartContents.Add(gunPartContent);
-        GunParts.Add(gunPart);
-        
-        await SaveChangesAsync();
-        return true;
+            return 0;
+        }
+        await GunParts.AddAsync(gunPart);
+        return await SaveChangesAsync();
+    }
+
+    public Task<List<GunPart>> GetAllGunPartsAsync()
+    {
+        return GunParts.ToListAsync();
+    }
+
+    public async Task<List<GunBuild>> GetAllGunBuildsAsync()
+    {
+        return await GunBuilds.ToListAsync();
     }
 }

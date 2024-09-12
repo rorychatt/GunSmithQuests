@@ -21,6 +21,44 @@ namespace GSQApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("GSQBusiness.Models.Attachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("PositionX")
+                        .HasColumnType("real");
+
+                    b.Property<float>("PositionY")
+                        .HasColumnType("real");
+
+                    b.Property<float>("PositionZ")
+                        .HasColumnType("real");
+
+                    b.Property<float>("RotationX")
+                        .HasColumnType("real");
+
+                    b.Property<float>("RotationY")
+                        .HasColumnType("real");
+
+                    b.Property<float>("RotationZ")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Attachments");
+                });
+
             modelBuilder.Entity("GSQBusiness.Models.GunBuild", b =>
                 {
                     b.Property<int>("Id")
@@ -32,17 +70,27 @@ namespace GSQApi.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EulerAngles")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<float>("PositionX")
+                        .HasColumnType("real");
+
+                    b.Property<float>("PositionY")
+                        .HasColumnType("real");
+
+                    b.Property<float>("PositionZ")
+                        .HasColumnType("real");
+
+                    b.Property<float>("RotationX")
+                        .HasColumnType("real");
+
+                    b.Property<float>("RotationY")
+                        .HasColumnType("real");
+
+                    b.Property<float>("RotationZ")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -57,57 +105,49 @@ namespace GSQApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ContentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EulerAngles")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ContentId");
 
                     b.ToTable("GunParts");
                 });
 
             modelBuilder.Entity("GSQBusiness.Models.GunPartContent", b =>
                 {
-                    b.Property<int>("GunPartId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<byte[]>("ByteArr")
                         .IsRequired()
-                        .HasColumnType("VARBINARY(MAX)");
+                        .HasColumnType("varbinary(max)");
 
-                    b.HasKey("GunPartId");
+                    b.HasKey("Id");
 
                     b.ToTable("GunPartContents");
                 });
 
-            modelBuilder.Entity("GSQBusiness.Models.GunPartContent", b =>
-                {
-                    b.HasOne("GSQBusiness.Models.GunPart", null)
-                        .WithOne("Content")
-                        .HasForeignKey("GSQBusiness.Models.GunPartContent", "GunPartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("GSQBusiness.Models.GunPart", b =>
                 {
-                    b.Navigation("Content")
+                    b.HasOne("GSQBusiness.Models.GunPartContent", "Content")
+                        .WithMany()
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Content");
                 });
 #pragma warning restore 612, 618
         }
