@@ -9,8 +9,8 @@ namespace GSQApi.Controllers;
 public class GunBuildsController(GunBuildsContext db) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GunBuild>>> GetGunBuilds()
+    public ActionResult<IEnumerable<GunBuild>> GetGunBuilds()
     {
-        return await Task.FromResult<ActionResult<IEnumerable<GunBuild>>>(Ok(db.GetGunBuilds()));
+        return Ok(db.GetGunBuilds());
     }
 }

@@ -13,17 +13,10 @@ public class GunBuildsContext(DbContextOptions<GunBuildsContext> options) : DbCo
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // modelBuilder.Entity<GunPart>()
-        //     .Property(e => e.Position)
-        //     .HasConversion(new Vector3Converter());
-        //
-        // modelBuilder.Entity<GunPart>()
-        //     .Property(e => e.EulerAngles)
-        //     .HasConversion(new Vector3Converter());
-
         modelBuilder.Entity<GunPartContent>()
-            .Property(e => e.ByteArr)
-            .HasColumnType("VARBINARY(MAX)");
+            .HasOne(g => g.GunPart)
+            .WithOne(p => p.Content)
+            .HasForeignKey<GunPartContent>(c => c.GunPartId);
 
         modelBuilder.Entity<GunBuild>()
             .Property(e => e.Position)
