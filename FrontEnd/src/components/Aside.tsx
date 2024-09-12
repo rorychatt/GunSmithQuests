@@ -8,7 +8,7 @@ interface GunPart {
     description: string;
 }
 
-export function Aside() {
+export function Aside({ onAddPart }: { onAddPart: (part: GunPart) => void }) {
     const [gunParts, setGunParts] = useState<GunPart[]>([]);
     const [usedParts, setUsedParts] = useState<GunPart[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -29,6 +29,7 @@ export function Aside() {
 
     const addPartToBuild = (part: GunPart) => {
         setUsedParts([...usedParts, part]);
+        onAddPart(part);
     };
 
     const removePartFromBuild = (part: GunPart) => {
@@ -40,7 +41,7 @@ export function Aside() {
     );
 
     return (
-        <aside className="flex flex-col items-center justify-center text-center border-2 border-gray-300 rounded-lg p-2">
+        <aside className="flex flex-col items-center justify-center text-center border-2 border-gray-300 rounded-lg p-4">
             <h2>Used Gun Parts</h2>
             {usedParts.length > 0 ? (
                 <ul>
@@ -81,27 +82,3 @@ export function Aside() {
         </aside>
     );
 }
-//
-// function GunPartModel({ part }: { part: GunPart }) {
-//     const obj = useLoader(OBJLoader, `${API_URL}/GunParts/${part.guid}/model.obj`);
-//     return <primitive object={obj} />;
-// }
-//
-// export function Main() {
-//     const [usedParts] = useState<GunPart[]>([]);
-//
-//     return (
-//         <aside className="flex flex-col items-center justify-center text-center">
-//             <Canvas className="border-2 border-gray-300 rounded-lg p-2" gl={{ alpha: true }} style={{ background: '#e0f7fa' }} camera={{ position: [0, 0, 5] }}>
-//                 <ambientLight intensity={0.5} />
-//                 <pointLight position={[10, 10, 10]} />
-//                 <directionalLight position={[5, 5, 5]} intensity={1} />
-//                 <spotLight position={[-5, 5, 5]} angle={0.3} penumbra={1} intensity={1} castShadow />
-//                 {usedParts.map(part => (
-//                     <GunPartModel key={part.guid} part={part} />
-//                 ))}
-//                 <OrbitControls />
-//             </Canvas>
-//         </aside>
-//     );
-// }
