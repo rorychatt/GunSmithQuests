@@ -16,7 +16,7 @@ public class GunBuild : IDescribable, IPositionable
     public Vector3 Position { get; set; }
     public Vector3 EulerAngles { get; set; }
 
-    private List<GunPart> Attachments { get; set; } = [];
+    public List<GunPart> Attachments { get; set; } = [];
     
     public void AddAttachment(GunPart attachment)
     {
