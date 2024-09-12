@@ -28,7 +28,9 @@ public class GunPartsController(GunBuildsContext db) : ControllerBase
             Content = content
         };
         
-        await db.AddGunPartAsync(gunPart);
+        var taskResult = await db.AddGunPartAsync(gunPart);
+        
+        return taskResult == 1 ? Ok() : StatusCode(400);
     }
 
     [HttpGet("listAll")]
